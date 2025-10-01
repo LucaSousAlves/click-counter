@@ -1,97 +1,125 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# VobysApp - Contador de Cliques
 
-# Getting Started
+**Nome do candidato:** Lucas de Sousa Alves
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Descrição do Projeto
 
-## Step 1: Start Metro
+O VobysApp é um aplicativo móvel desenvolvido em React Native que permite contabilizar cliques, registrar timestamps de cada interação, persistir o histórico localmente e exportar os dados.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Funcionalidades
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **Contador de Cliques**: Botão principal que incrementa o contador a cada toque
+- **Histórico Detalhado**: Lista com data e hora exatas de cada clique
+- **Persistência Local**: Dados salvos automaticamente usando AsyncStorage
+- **Exportação**: Gera arquivo .txt com histórico e abre compartilhador nativo
+- **Limpeza Segura**: Opção para limpar histórico com confirmação
 
-```sh
-# Using npm
-npm start
+## Tecnologias Utilizadas
 
-# OR using Yarn
-yarn start
+- **React Native 0.81.4**
+- **TypeScript**
+- **Context API** para gerenciamento de estado
+- **AsyncStorage** para persistência local
+- **react-native-share** para exportação
+- **react-native-fs** para manipulação de arquivos
+- **react-native-safe-area-context** para áreas seguras
+
+## Pré-requisitos
+
+- Node.js LTS (versão 20 ou superior)
+- Java JDK 17 (para Android)
+- Android Studio com SDK/Emulador configurados
+- Xcode (para iOS, apenas macOS)
+- Yarn ou npm
+
+## Instalação e Execução
+
+### 1. Clone o repositório
+```bash
+git clone <url-do-repositorio>
+cd VobysApp
 ```
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+### 2. Instale as dependências
+```bash
+npm install
+# ou
+yarn
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+### 3. Configuração para iOS (macOS)
+```bash
+cd ios
+pod install
+cd ..
 ```
 
-Then, and every time you update your native dependencies, run:
+### 4. Execute o aplicativo
 
-```sh
-bundle exec pod install
+#### Android
+# Antes de executar, certifique-se de que:
+# - O emulador Android está iniciado no Android Studio
+#   OU
+# - Um dispositivo físico está conectado via USB e reconhecido com `adb devices`
+
+```bash
+# Com emulador Android iniciado ou dispositivo conectado
+npx react-native run-android
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+#### iOS (macOS)
+```bash
+# Execute em um simulador iOS
+npx react-native run-ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Como Usar
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+1. **Contar Cliques**: Toque no botão "Clique Aqui!" para incrementar o contador
+2. **Ver Histórico**: O histórico é exibido automaticamente abaixo do contador
+3. **Exportar Dados**: Use o botão "Exportar" para gerar e compartilhar um arquivo .txt
+4. **Limpar Dados**: Use o botão "Limpar" para zerar o contador e histórico (com confirmação)
 
-## Step 3: Modify your app
 
-Now that you have successfully run the app, let's make changes!
+## Decisões Técnicas
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- **AsyncStorage**: Solução padrão para persistência local em React Native, confiável e bem documentada
+- **TypeScript**: Adicionei tipagem estática para melhor manutenibilidade e detecção de erros em tempo de desenvolvimento
+- **Componentes Funcionais**: Uso de hooks para gerenciamento de estado e ciclo de vida, mais moderno que classes
+- **Formatação de Data**: Utiliza `toLocaleString` com configuração brasileira para formatação consistente e familiar ao usuário
+- **Estrutura de Pastas**: Organizei por responsabilidade (components, contexts, utils, etc.) para facilitar manutenção
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Desafios Encontrados e Soluções
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Durante o desenvolvimento, enfrentei alguns desafios técnicos importantes:
 
-## Congratulations! :tada:
+### 1. **Broadcast Receiver Android 13+ (RECEIVER_EXPORTED)**
+- **Problema**: Erro "One of RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED should be specified"
+- **Causa**: Android 13+ exige que broadcast receivers especifiquem explicitamente se são exportados
+- **Solução**: Atualizei `react-native-share` de v8.2.2 para v12.2.0 que já inclui as correções
 
-You've successfully run and modified your React Native App. :partying_face:
+### 2. **URI Null no Compartilhamento**
+- **Problema**: Erro "Attempt to invoke virtual method 'java.lang.String android.net.Uri.getScheme()' on a null object reference"
+- **Causa**: Configuração do FileProvider causando conflitos com URIs
+- **Solução**: Implementei uma abordagem simples que gera o arquivo .txt e usa file URI para compartilhamento
 
-### Now what?
+### 3. **Persistência de Datas**
+- **Problema**: JSON.stringify/parse não preserva objetos Date
+- **Solução**: Conversão manual de strings para objetos Date no carregamento
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+### 4. **Configuração Android**
+- **Problema**: Configuração de ANDROID_HOME e PATH
+- **Solução**: Documentei as configurações necessárias no README
 
-# Troubleshooting
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
-# Learn More
 
-To learn more about React Native, take a look at the following resources:
+## Formato de Exportação
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+O arquivo .txt exportado contém uma linha por registro, ordenado do mais recente para o mais antigo:
+
+```
+17/09/2025 15:30:05
+17/09/2025 15:29:58
+17/09/2025 15:29:45
+```
