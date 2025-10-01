@@ -37,7 +37,7 @@ O VobysApp é um aplicativo móvel desenvolvido em React Native que permite cont
 ### 1. Clone o repositório
 ```bash
 git clone -b main git@github.com:LucaSousAlves/click-counter.git
-cd VobysApp
+cd click-counter
 ```
 
 ### 2. Instale as dependências
