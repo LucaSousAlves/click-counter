@@ -57,10 +57,10 @@ cd ..
 ### 4. Execute o aplicativo
 
 #### Android
-# Antes de executar, certifique-se de que:
-# - O emulador Android está iniciado no Android Studio
-#   OU
-# - Um dispositivo físico está conectado via USB e reconhecido com `adb devices`
+## Antes de executar, certifique-se de que:
+### - O emulador Android está iniciado no Android Studio
+###   OU
+### - Um dispositivo físico está conectado via USB e reconhecido com `adb devices`
 
 ```bash
 # Com emulador Android iniciado ou dispositivo conectado
